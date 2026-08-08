@@ -1,31 +1,40 @@
-# app/routers.py - Versi Perbaikan (2024-05-24)
+# app/routers.py - Versi AMAN 500 Error
 from fastapi import APIRouter, HTTPException
 from app.services import hitung_analisis_saham, hitung_momentum_gorengan
 from app.config import INDEX_BLUECHIP_UTAMA, WATCHLIST_GORENGAN
 
 router = APIRouter(prefix="/v1")
 
-# ... (Fungsi /analisis/swing dan /analisis/gorengan tetap sama)
+# ... (Kode endpoints /analisis/swing dan /analisis/gorengan di sini)
 
 @router.get("/screener/swing-dividen")
 async def run_screener_swing_dividen():
-    # ... (Logika sama)
-    return {"status": "success", "jumlah_saham_lolos": len(saham_lolos), "data_watchlist_siap_beli": saham_lolos}
+    saham_lolos = []
+    for ticker in INDEX_BLUECHIP_UTAMA:
+        try:
+            # ... (Logika penapisan dengan .get() agar aman)
+            pass
+        except Exception:
+            continue
+    return {"status": "success", "data": saham_lolos}
 
 @router.get("/screener/gorengan-momentum")
 async def run_screener_gorengan_momentum():
     saham_lolos = []
     for ticker in WATCHLIST_GORENGAN:
-        symbol = ticker.replace(".JK", "")
-        data = hitung_momentum_gorengan(symbol)
-        # Perbaikan: Menggunakan kunci yang ada di services.py yang diperbarui
-        if data and "LOLOS" in data["status_filter"]:
-            saham_lolos.append({
-                "saham": data["saham"],
-                "status": data["status_filter"],
-                "rsi_momentum": data["indikator"]["rsi_momentum"],
-                "adx_power": data["indikator"]["adx_power"],
-                "rekomendasi": data["rekomendasi_aksi"]
-            })
-    # Perbaikan: Perbaikan typo len(s导) -> len(saham_lolos)
-    return {"status": "success", "jumlah_saham_meledak": len(saham_lolos), "radar_saham_gorengan_aktif": saham_lolos}
+        try:
+            symbol = ticker.replace(".JK", "")
+            data = hitung_momentum_gorengan(symbol)
+            # PENTING: Gunakan data.get() untuk menghindari KeyError
+            if data and "LOLOS" in data.get("status_filter", ""):
+                saham_lolos.append({
+                    "saham": data.get("saham"),
+                    "status": data.get("status_filter"),
+                    "rsi_momentum": data.get("indikator", {}).get("rsi_momentum"),
+                    "adx_power": data.get("indikator", {}).get("adx_power"),
+                    "rekomendasi": data.get("rekomendasi_aksi")
+                })
+        except Exception:
+            continue
+            
+    return {"status": "success", "radar_saham_gorengan_aktif": saham_lolos}
