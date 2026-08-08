@@ -222,5 +222,18 @@ def hitung_momentum_gorengan(ticker_symbol: str):
     
     volume_terakhir = terakhir['Volume']
     volume_rata_rata = df['Volume'].tail(35).mean()
-    is_volume_spike = volume_terakhir > (volume_rata_rata * 2.5)is_bullish_momentum = harga_sekarang > ema5 and ema5 > ema10is_trend_explosive = adx > 20.0 and plus_di > minus_dicl_level = int(harga_sekarang * 0.965)tp_level = int(harga_sekarang * 1.07)info = saham.infobeta = info.get('beta', 1.8)status_filter = "GAGAL 💤"if is_volume_spike and is_bullish_momentum and is_trend_explosive:status_filter = "LOLOS SCREENING 🔥 (Ledakan ADX + Bandar Masuk!)"return {"saham": ticker_symbol.upper(),"harga_saat_ini": harga_sekarang,"status_filter": status_filter,"indikator": {"lonjakan_volume": f"{round(volume_terakhir / volume_rata_rata, 1)}x Lipat","rsi_momentum": round(rsi, 2),"adx_power": round(adx, 2),"tingkat_volatilitas_beta": round(beta, 2)},"bracket_order_growin": {"target_take_profit": tp_level,"batas_cut_loss": cl_level},"peringatan_keamanan": "RESIKO EKSTREM! Pergerakan harga murni ledakan tren momentum intraday.","rekomendasi_aksi": "DAY TRADING CEPAT - WAJIB LANGSUNG SET AUTO ORDER STOP LOSS DI GROWIN!"}
+    # Perbaikan: Tambahkan baris baru
+    is_volume_spike = volume_terakhir > (volume_rata_rata * 2.5) 
+    is_bullish_momentum = harga_sekarang > ema5 and ema5 > ema10
+    is_trend_explosive = adx > 20.0 and plus_di > minus_di
+    
+    cl_level = int(harga_sekarang * 0.965) 
+    tp_level = int(harga_sekarang * 1.07) 
+    
+    info = saham.info
+    beta = info.get('beta', 1.8) 
+    
+    status_filter = "GAGAL 💤" 
+    if is_volume_spike and is_bullish_momentum and is_trend_explosive: 
+        status_filter = "LOLOS SCREENING 🔥 (Ledakan ADX + Bandar Masuk!)"
    
