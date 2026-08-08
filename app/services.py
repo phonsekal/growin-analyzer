@@ -233,7 +233,20 @@ def hitung_momentum_gorengan(ticker_symbol: str):
     info = saham.info
     beta = info.get('beta', 1.8) 
     
-    status_filter = "GAGAL 💤" 
-    if is_volume_spike and is_bullish_momentum and is_trend_explosive: 
-        status_filter = "LOLOS SCREENING 🔥 (Ledakan ADX + Bandar Masuk!)"
+    # === PERBAIKAN STRUKTUR AKHIR FUNGSI GORENGAN ===
+    status_filter = "GAGAL 💤"
+    if is_volume_spike and is_bullish_momentum and is_trend_explosive:
+        status_filter = "LOLOS SCREENING 🔥"
+
+    # Baris Wajib: Mengembalikan payload data JSON utuh agar tidak memicu Error 500
+    return {
+        "saham": ticker_symbol.upper(),
+        "status_filter": status_filter,
+        "indikator": {
+            "rsi_momentum": round(rsi, 2),
+            "adx_power": round(adx, 2),
+        },
+        "rekomendasi_aksi": "DAY TRADING CEPAT"
+    }
+
    
