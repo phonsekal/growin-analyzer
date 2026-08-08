@@ -1,4 +1,6 @@
+# api/index.py
 from fastapi import FastAPI
+# Ubah jalur impor agar mengarah ke folder app dengan benar
 from app.routers import router
 
 app = FastAPI(
@@ -11,4 +13,4 @@ app.include_router(router)
 
 @app.get("/")
 def check_status():
-    return {"status": "active", "message": "Server v4.0 Online! Siap kirim data ke n8n."}
+    return {"status": "active", "message": "Server v4.0 Online di Vercel! Siap kirim data ke n8n."}
