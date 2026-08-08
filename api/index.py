@@ -2,8 +2,13 @@
 import sys
 import os
 
-# Memastikan modul app terbaca oleh Vercel environment
+# Jembatan pengenal agar Vercel bisa membaca folder app di luar folder api
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# --- SOLUSI MUTLAK ERROR 500 VERCEL ---
+# Menonaktifkan fungsi caching yfinance agar tidak menabrak sistem Read-Only Vercel
+import yfinance as yf
+yf.set_tz_cache_false() 
 
 from fastapi import FastAPI
 from app.routers import router
@@ -20,5 +25,5 @@ app.include_router(router)
 def check_status():
     return {"status": "active", "message": "Server v4.0 Online di Vercel! Siap kirim data ke n8n."}
 
-# Vercel membutuhkan ini jika kita mendaftarkannya sebagai index.app di vercel.json
+# Wajib diekspos sebagai handler untuk Vercel Runtime
 handler = app
