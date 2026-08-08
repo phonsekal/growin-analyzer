@@ -7,6 +7,10 @@
   ],
   "routes": [
     {
+      "src": "/v1/(.*)",
+      "dest": "api/index.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "api/index.py"
     }
